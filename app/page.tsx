@@ -1,78 +1,46 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import FadeScaleTransition from "@/components/ui/fade-scale-transition";
 
 export default function DreamPage() {
-    const [isHovered, setIsHovered] = useState(false);
+    const [isVisible, setIsVisible] = useState(true); // 나가는 상태 대신 '보임' 상태로 관리
+
+    const router = useRouter();
+    const handleStart = () => {
+        setIsVisible(false); // 애니메이션 시작 (사라짐)
+
+        setTimeout(() => {
+            router.push(`/form`);
+        }, 500);
+    };
 
     return (
         <div className="relative min-h-screen w-full overflow-hidden">
-            {/* Background Image */}
-            <div
-                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                style={{
-                    backgroundImage: "url('/images/evening-scene.jpg')",
-                }}
-            />
-
-            {/* Overlay for better readability */}
-            <div className="absolute inset-0 bg-black/20" />
-
-            {/* Floating particles/stars effect */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                {[...Array(20)].map((_, i) => (
-                    <div
-                        key={i}
-                        className="absolute w-1 h-1 bg-white/60 rounded-full animate-pulse"
-                        style={{
-                            left: `${Math.random() * 100}%`,
-                            top: `${Math.random() * 100}%`,
-                            animationDelay: `${Math.random() * 3}s`,
-                            animationDuration: `${2 + Math.random() * 2}s`,
-                        }}
-                    />
-                ))}
-            </div>
-
-            {/* Center Form */}
             <div className="relative z-10 flex items-center justify-center min-h-screen px-4">
-                <div
-                    className="w-full max-w-md p-8 rounded-2xl backdrop-blur-md bg-white/10 border border-white/20 shadow-2xl transition-all duration-500"
-                    style={{
-                        transform: isHovered
-                            ? "translateY(-4px)"
-                            : "translateY(0)",
-                        boxShadow: isHovered
-                            ? "0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 255, 255, 0.1)"
-                            : "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-                    }}
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
+                <FadeScaleTransition
+                    show={isVisible}
+                    className="w-full max-w-md p-8 rounded-2xl backdrop-blur-md bg-white/10 border border-white/20 shadow-2xl relative"
                 >
-                    {/* Content */}
                     <div className="text-center space-y-6">
                         <h1 className="text-2xl md:text-3xl font-light text-white tracking-wide">
                             밤하늘 아래, 다짐 캡슐
                         </h1>
-
                         <p className="text-white/80 text-sm md:text-base leading-relaxed font-light">
-                            마음속으로만 했던 다짐
-                            <br />
-                            전하지 못했던 진심
-                            <br />
-                            이루고자 하는 목표
-                            <br />
+                            마음속으로만 했던 다짐 <br />
+                            전하지 못했던 진심 <br />
+                            이루고자 하는 목표 <br />
                             <span className="text-white/60 text-xs mt-2 block">
-                                모든 소망을 다짐 캡슐에 담아
-                                <br />
-                                미래의 우리에게 보내보아요
+                                모든 소망을 다짐 캡슐에 담아 <br />
+                                미래의 우리에게.
                             </span>
                         </p>
-
                         <div className="pt-4">
                             <Button
-                                className="w-full py-6 text-base font-light tracking-wider bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
+                                onClick={handleStart}
+                                className="w-full py-6 text-base font-light tracking-wider bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-lg cursor-pointer"
                                 variant="ghost"
                             >
                                 여정을 시작하기
@@ -80,13 +48,12 @@ export default function DreamPage() {
                         </div>
                     </div>
 
-                    {/* Decorative elements */}
+                    {/* 장식용 요소들 */}
                     <div className="absolute -top-1 -left-1 w-8 h-8 border-t border-l border-white/30 rounded-tl-2xl" />
                     <div className="absolute -bottom-1 -right-1 w-8 h-8 border-b border-r border-white/30 rounded-br-2xl" />
-                </div>
+                </FadeScaleTransition>
             </div>
 
-            {/* Bottom gradient */}
             <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-black/40 to-transparent pointer-events-none" />
         </div>
     );
