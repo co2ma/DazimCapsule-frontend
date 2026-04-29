@@ -1,33 +1,36 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import CopyableInput from "@/components/ui/copyable-input";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import FadeScaleTransition from "@/components/ui/fade-scale-transition";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useRouter } from "next/navigation";
+import { OutlineDetail } from "@/components/ui/outline_detail";
 
 export default function FormPage() {
     const params = useParams();
+    const router = useRouter();
     const [currUrl, setCurrUrl] = useState("");
     const [isVisible, setIsVisible] = useState(true);
+
     useEffect(() => {
         setCurrUrl(window.location.href);
     }, []);
 
-    const router = useRouter();
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault(); // 폼 기본 제출(새로고침) 방지
 
-    const handleStart = () => {
-        setIsVisible(false); // 애니메이션 시작 (사라짐)
+        setIsVisible(false); // 1. 폼이 스르륵 사라짐
 
+        // 2. 폼이 사라지는 애니메이션(0.5초)이 끝난 후 완료 페이지로 이동
         setTimeout(() => {
-            router.push(`/form`);
+            // id 값을 살려서 이동하고 싶다면 `/form/${params.id}/success` 등으로 변경할 수 있습니다.
+            // 여기서는 심플하게 `/success` 라우트로 이동한다고 가정했습니다.
+            router.push(`/success`);
         }, 500);
     };
-
-    const uniqueId = params.id; // URL에서 시드 값을 가져옵니다.
 
     return (
         <div className="relative z-10 flex items-center justify-center min-h-screen">
@@ -44,25 +47,26 @@ export default function FormPage() {
                 </div>
                 <h3 className="text-white">이름 / 닉네임</h3>
                 <div className="text-sm text-white/60 mb-6 text-center">
-                    <Input/>
+                    <Input />
                 </div>
                 <h3 className="text-white">이메일</h3>
                 <div className="text-sm text-white/60 mb-6 text-center">
-                    <Input/>
+                    <Input />
                 </div>
 
-                {/* 여기에 폼 입력을 만드시면 됩니다 */}
-                <form>
+                <form onSubmit={handleSubmit}>
                     <h3 className="text-white">내용</h3>
-                    <Textarea className="text-white/60 mb-6" placeholder="미래에 보내는 나의 이야기..."/>
-                    <Button onClick={handleStart} className="w-full py-6 text-base font-light tracking-wider bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-lg cursor-pointer"
-                                variant="ghost">
+                    <Textarea className="text-white/60 mb-6" placeholder="미래에 보내는 나의 이야기..." />
+                    <Button
+                        type="submit"
+                        className="w-full py-6 text-base font-light tracking-wider bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-lg cursor-pointer"
+                        variant="ghost"
+                    >
                         미래에서 기다리기
                     </Button>
                 </form>
-                {/* 장식용 요소들 */}
-                    <div className="absolute -top-1 -left-1 w-8 h-8 border-t border-l border-white/30 rounded-tl-2xl" />
-                    <div className="absolute -bottom-1 -right-1 w-8 h-8 border-b border-r border-white/30 rounded-br-2xl" />
+
+                <OutlineDetail/>
             </FadeScaleTransition>
         </div>
     );
