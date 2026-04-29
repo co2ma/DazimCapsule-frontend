@@ -1,12 +1,13 @@
-// app/form/[id]/page.tsx
 "use client";
 
 import { useParams } from "next/navigation";
-import { motion } from "framer-motion";
 import CopyableInput from "@/components/ui/copyable-input";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import FadeScaleTransition from "@/components/ui/fade-scale-transition";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useRouter } from "next/navigation";
 
 export default function FormPage() {
     const params = useParams();
@@ -15,6 +16,16 @@ export default function FormPage() {
     useEffect(() => {
         setCurrUrl(window.location.href);
     }, []);
+
+    const router = useRouter();
+
+    const handleStart = () => {
+        setIsVisible(false); // 애니메이션 시작 (사라짐)
+
+        setTimeout(() => {
+            router.push(`/form`);
+        }, 500);
+    };
 
     const uniqueId = params.id; // URL에서 시드 값을 가져옵니다.
 
@@ -31,17 +42,27 @@ export default function FormPage() {
                 <div className="text-sm text-white/60 mb-6 text-center">
                     <CopyableInput value={currUrl} />
                 </div>
+                <h3 className="text-white">이름 / 닉네임</h3>
+                <div className="text-sm text-white/60 mb-6 text-center">
+                    <Input/>
+                </div>
+                <h3 className="text-white">이메일</h3>
+                <div className="text-sm text-white/60 mb-6 text-center">
+                    <Input/>
+                </div>
 
                 {/* 여기에 폼 입력을 만드시면 됩니다 */}
                 <form>
-                    <textarea
-                        className="w-full bg-white/5 border border-white/20 rounded-lg p-4 focus:outline-none focus:border-white/50"
-                        placeholder="미래의 나에게 보내는 한 마디..."
-                    />
-                    <Button className="cursor-pointer">
+                    <h3 className="text-white">내용</h3>
+                    <Textarea className="text-white/60 mb-6" placeholder="미래에 보내는 나의 이야기..."/>
+                    <Button onClick={handleStart} className="w-full py-6 text-base font-light tracking-wider bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-lg cursor-pointer"
+                                variant="ghost">
                         미래에서 기다리기
                     </Button>
                 </form>
+                {/* 장식용 요소들 */}
+                    <div className="absolute -top-1 -left-1 w-8 h-8 border-t border-l border-white/30 rounded-tl-2xl" />
+                    <div className="absolute -bottom-1 -right-1 w-8 h-8 border-b border-r border-white/30 rounded-br-2xl" />
             </FadeScaleTransition>
         </div>
     );
