@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import FadeScaleTransition from "@/components/ui/fade-scale-transition";
+import { OutlineDetail } from "@/components/ui/outline_detail";
 
 export default function DreamPage() {
     const [isVisible, setIsVisible] = useState(true); // 나가는 상태 대신 '보임' 상태로 관리
@@ -48,9 +49,7 @@ export default function DreamPage() {
                         </div>
                     </div>
 
-                    {/* 장식용 요소들 */}
-                    <div className="absolute -top-1 -left-1 w-8 h-8 border-t border-l border-white/30 rounded-tl-2xl" />
-                    <div className="absolute -bottom-1 -right-1 w-8 h-8 border-b border-r border-white/30 rounded-br-2xl" />
+                    <OutlineDetail/>
                 </FadeScaleTransition>
             </div>
 
